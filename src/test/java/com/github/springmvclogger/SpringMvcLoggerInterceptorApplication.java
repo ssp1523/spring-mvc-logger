@@ -6,9 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringMvcLoggerInterceptorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringMvcLoggerInterceptorApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(SpringMvcLoggerInterceptorApplication.class, args);
+    }
 
 }

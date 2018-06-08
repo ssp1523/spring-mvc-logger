@@ -6,7 +6,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * 日记监听
+ * 日志监听
  * @author: sunshaoping
  * @date: Create by in 下午4:22 2018/6/8
  */

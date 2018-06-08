@@ -17,14 +17,13 @@ import java.lang.annotation.*;
 @Documented
 public @interface SpringMVCLogger {
     /**
-     * 日志配置key
-     * 默认简单类名#方法名
+     * {@link #configKey()}
      */
     @AliasFor("configKey")
     String value() default "";
 
     /**
-     * 日志配置key
+     * 日志配置key,默认类名#方法
      */
     @AliasFor("value")
     String configKey() default "";

@@ -20,6 +20,7 @@ public class UserController {
 
     private AtomicLong pk = new AtomicLong();
 
+    @SpringMVCLogger
     @PostMapping
     public void save(@RequestBody User user) {
         String id = String.valueOf(pk.incrementAndGet());

@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@SpringMVCLogger(loggerFactory = NoLoggerFactory.class)
+@SpringMVCLogger(loggerFactory = NoLoggerFactory.class,response = true)
 public @interface NotLogger {
 
     /**
@@ -46,12 +46,6 @@ public @interface NotLogger {
      */
     @AliasFor(annotation = SpringMVCLogger.class)
     boolean request() default true;
-
-    /**
-     * Alias for {@link SpringMVCLogger#response}.
-     */
-    @AliasFor(annotation = SpringMVCLogger.class)
-    boolean response() default false;
 
     /**
      * Alias for {@link SpringMVCLogger#requestHeaders}.
