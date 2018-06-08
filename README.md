@@ -1,4 +1,4 @@
-#Spring MVC 日志拦截处理
+# Spring MVC 日志拦截处理
 
 **使用spirng `HandlerInterceptor`拦截器，基于注解驱动`@SpringMVCLogger`的controler类的方法进行拦截打印日志**
 
@@ -16,7 +16,7 @@
 
 ![示例](img/652C444D-344A-4A06-A6D3-234ABD686272.png)
 
-##例子1 - 打印user保存请求信息
+## 例子1 - 打印user保存请求信息
 
 创建controller类 UserController，save方法添加注解 `@SpringMVCLogger`
 
@@ -60,7 +60,7 @@ headers:
 
 
 
-##例子2-修改configKey打印方式
+## 例子2-修改configKey打印方式
 
 例子1中打印信息是基于默认方式，类名#方法名(UserController#save)，configKey可以自己起名字如下：
 
@@ -82,7 +82,7 @@ GET http://localhost:8080/user/1
 
 
 
-##例子3-注解`@SpringMVCLogger`使用在类上
+## 例子3-注解`@SpringMVCLogger`使用在类上
 
 如果一个类的所有方法都需要打印请求日志，可以把`@SpringMVCLogger`配置在类上,这样所有的方法都可以打印请求信息了。
 
