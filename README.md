@@ -56,7 +56,7 @@ headers:
 
 打印信息如下:
 
-![](/src/Projects/self/spring-mvc-logger/img/QQ20180608-172837.png)
+![](img/QQ20180608-172837.png)
 
 
 
@@ -78,7 +78,7 @@ GET http://localhost:8080/user/1
 
 打印信息如下，原有的`类名#方法名`变成了`用户详情接口`
 
-![](/src/Projects/self/spring-mvc-logger/img/QQ20180608-174308.png)
+![](img/QQ20180608-174308.png)
 
 
 
