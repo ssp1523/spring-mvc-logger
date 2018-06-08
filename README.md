@@ -197,7 +197,7 @@ public @interface NotLogger {
     }
 ```
 
-日记监听类`LoggerListener`
+日志监听类`LoggerListener`
 
 ```java
    
