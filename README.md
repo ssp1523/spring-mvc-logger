@@ -1,6 +1,6 @@
 #Spring MVC 日志拦截处理
 
-**使用spirng **`HandlerInterceptor`**拦截器，基于注解驱动`@SpringMVCLogger`的controler类的方法进行拦截打印日志**
+**使用spirng `HandlerInterceptor`拦截器，基于注解驱动`@SpringMVCLogger`的controler类的方法进行拦截打印日志**
 
 ​	环境信息
 
