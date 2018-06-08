@@ -355,5 +355,5 @@ public @interface NotLogger {
 
 
 
-[项目地址](https://github.com/ssp1523/spring-mvc-logger)   [例子地址](https://github.com/ssp1523/spring-mvc-logger)
+[项目地址](https://github.com/ssp1523/spring-mvc-logger)   [例子地址](https://github.com/ssp1523/spring-mvc-logger/tree/master/src/test/java/com/github/springmvclogger)
 
