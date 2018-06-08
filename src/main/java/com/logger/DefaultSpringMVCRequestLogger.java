@@ -33,6 +33,7 @@ public class DefaultSpringMVCRequestLogger extends BaseSpringMVCLogger implement
         //打印日志 请求日志
         Logger logger = createLogger(request, loggerHandler);
         logger.logRequest(springMVCLoggerInfo.getConfigKey(), requestFeign);
+        applicationContext.publishEvent(new SpringMVCRequestLoggerEvent(this, request, loggerHandler));
     }
 
 

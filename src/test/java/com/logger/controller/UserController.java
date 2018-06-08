@@ -1,8 +1,8 @@
 package com.logger.controller;
 
+import com.logger.NotLogger;
 import com.logger.SpringMVCLogger;
 import com.logger.User;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,6 +37,12 @@ public class UserController {
     @GetMapping
     public List<User> findAll(@RequestHeader("token") String token) {
         System.out.println("请求头token信息：" + token);
+        return new ArrayList<>(userMap.values());
+    }
+
+    @NotLogger
+    @GetMapping("/not-logger")
+    public List<User> notLogger() {
         return new ArrayList<>(userMap.values());
     }
 }

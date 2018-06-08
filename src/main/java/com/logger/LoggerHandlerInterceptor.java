@@ -1,5 +1,6 @@
 package com.logger;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -13,7 +14,7 @@ import java.util.Set;
  * @author: sunshaoping
  * @date: Create by in 上午10:52 2018/5/24
  */
-
+@Slf4j
 public class LoggerHandlerInterceptor extends HandlerInterceptorAdapter {
 
 
@@ -37,18 +38,25 @@ public class LoggerHandlerInterceptor extends HandlerInterceptorAdapter {
         if (!(handler instanceof LoggerHandler)) {
             return true;
         }
-        LoggerHandler loggerHandler = (LoggerHandler) handler;
 
-        //请求开始时间
-        long requestStart = System.currentTimeMillis();
-        request.setAttribute(SpringMVCRequestLogger.REQUEST_START_TIME, requestStart);
+        try {
+            LoggerHandler loggerHandler = (LoggerHandler) handler;
 
-        if (springMVCResponseLogger != null
-                && isInterceptor(request, loggerHandler)
-                && loggerHandler.springMVCLoggerInfo().isRequest()) {
-            //请求日志
-            springMVCRequestLogger.requestLogger(request, loggerHandler);
+            //请求开始时间
+            long requestStart = System.currentTimeMillis();
+            request.setAttribute(SpringMVCRequestLogger.REQUEST_START_TIME, requestStart);
+
+            if (springMVCResponseLogger != null
+                    && loggerHandler.isInterceptor()
+                    && isInterceptor(request, loggerHandler)
+                    && loggerHandler.springMVCLoggerInfo().isRequest()) {
+                //请求日志
+                springMVCRequestLogger.requestLogger(request, loggerHandler);
+            }
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
         }
+
         return true;
     }
 
@@ -56,9 +64,9 @@ public class LoggerHandlerInterceptor extends HandlerInterceptorAdapter {
         HttpMethod method = HttpMethod.valueOf(request.getMethod());
         Set<HttpMethod> methods = loggerHandler.springMVCLoggerInfo().getMethods();
         if (CollectionUtils.isEmpty(methods)) {
-            return loggerHandler.isInterceptor();
+            return true;
         }
-        return loggerHandler.isInterceptor() && methods.contains(method);
+        return methods.contains(method);
     }
 
     /**
@@ -77,12 +85,17 @@ public class LoggerHandlerInterceptor extends HandlerInterceptorAdapter {
         if (!(handler instanceof LoggerHandler)) {
             return;
         }
-        LoggerHandler loggerHandler = (LoggerHandler) handler;
-        if (springMVCResponseLogger != null
-                && isInterceptor(request, loggerHandler)
-                && loggerHandler.springMVCLoggerInfo().isResponse()) {
-            //响应日志
-            springMVCResponseLogger.responseLogger(request, response, loggerHandler);
+        try {
+            LoggerHandler loggerHandler = (LoggerHandler) handler;
+            if (springMVCResponseLogger != null
+                    && loggerHandler.isInterceptor()
+                    && isInterceptor(request, loggerHandler)
+                    && loggerHandler.springMVCLoggerInfo().isResponse()) {
+                //响应日志
+                springMVCResponseLogger.responseLogger(request, response, loggerHandler);
+            }
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
         }
 
     }

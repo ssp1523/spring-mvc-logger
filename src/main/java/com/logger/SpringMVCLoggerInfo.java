@@ -1,6 +1,7 @@
 package com.logger;
 
 import lombok.Data;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.method.HandlerMethod;
@@ -33,13 +34,13 @@ public class SpringMVCLoggerInfo {
 
     private List<String> notRequestHeaders;
 
-    private Class<? extends LoggerFactory> loggerFactory;
+    private LoggerFactory loggerFactory;
 
     /**
      * 创建实例
      * @return null 方法和注解上无{@link SpringMVCLogger} 注解
      */
-    public static SpringMVCLoggerInfo createSpringMVCLoggerInfo(HandlerMethod handlerMethod) {
+    public static SpringMVCLoggerInfo createSpringMVCLoggerInfo(HandlerMethod handlerMethod, ApplicationContext applicationContext) {
         SpringMVCLogger springMVCLogger = handlerMethod.getMethodAnnotation(SpringMVCLogger.class);
         boolean isClass = false;
         if (springMVCLogger == null) {
@@ -65,7 +66,10 @@ public class SpringMVCLoggerInfo {
         springMVCLoggerInfo.response = springMVCLogger.response();
         springMVCLoggerInfo.requestHeaders = Arrays.asList(springMVCLogger.requestHeaders());
         springMVCLoggerInfo.notRequestHeaders = Arrays.asList(springMVCLogger.notRequestHeaders());
-        springMVCLoggerInfo.loggerFactory = springMVCLogger.loggerFactory();
+        springMVCLoggerInfo.loggerFactory = applicationContext.getBean(springMVCLogger.loggerFactory());
+        if (springMVCLoggerInfo.loggerFactory == null) {
+            throw new SpringMVCLoggerException("No logger factory instance of type method " + handlerMethod.getMethod());
+        }
         return springMVCLoggerInfo;
     }
 }

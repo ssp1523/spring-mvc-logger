@@ -30,5 +30,6 @@ public class DefaultSpringMVCResponseLogger extends BaseSpringMVCLogger implemen
 
         logger.logResponse(loggerHandler.springMVCLoggerInfo().getConfigKey(), responseFeign, end - requestStartTime);
 
+        applicationContext.publishEvent(new SpringMVCResponseLoggerEvent(this, request, response, loggerHandler));
     }
 }

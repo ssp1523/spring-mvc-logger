@@ -1,21 +1,22 @@
 package com.logger;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.FilterChain;
@@ -24,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * spring mvc logger 配置
@@ -103,13 +103,19 @@ public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
 
         @Bean
         @ConditionalOnMissingBean
-        public LoggerFactory infoLoggerFactory() {
+        public InfoLoggerFactory infoLoggerFactory() {
             return new InfoLoggerFactory();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public LoggerFactory debugLoggerFactory() {
+        public NoLoggerFactory noLoggerFactory() {
+            return new NoLoggerFactory();
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public DebugLoggerFactory debugLoggerFactory() {
             return new DebugLoggerFactory();
         }
 
@@ -129,7 +135,9 @@ public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
 
     @Configuration
     @Import(WebMvcAutoConfiguration.EnableWebMvcConfiguration.class)
-    public static class WebMvcRegistrationConfig extends WebMvcRegistrationsAdapter {
+    public static class WebMvcRegistrationConfig extends WebMvcRegistrationsAdapter implements ApplicationContextAware {
+
+        private ApplicationContext applicationContext;
 
         /**
          * 重写createHandlerMethod方法
@@ -141,15 +149,20 @@ public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
                 @Override
                 protected HandlerMethod createHandlerMethod(Object handler, Method method) {
                     HandlerMethod handlerMethod = super.createHandlerMethod(handler, method);
-                    SpringMVCLoggerInfo springMVCLoggerInfo = SpringMVCLoggerInfo.createSpringMVCLoggerInfo(handlerMethod);
+                    SpringMVCLoggerInfo springMVCLoggerInfo = SpringMVCLoggerInfo.createSpringMVCLoggerInfo(handlerMethod, applicationContext);
                     if (springMVCLoggerInfo == null) {
-                        return handlerMethod;
+                        return new NotInterceptorLoggerHandler(handlerMethod);
                     }
                     return new HandlerMethodLoggerHandler(springMVCLoggerInfo, handlerMethod);
                 }
             };
         }
 
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+            this.applicationContext = applicationContext;
+        }
     }
 
 }

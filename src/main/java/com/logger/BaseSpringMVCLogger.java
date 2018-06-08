@@ -120,7 +120,7 @@ public abstract class BaseSpringMVCLogger implements ApplicationContextAware {
         String attrKey = SPRING_MVC_LOGGER + clazz.getName();
         Logger logger = (Logger) request.getAttribute(attrKey);
         if (logger == null) {
-            LoggerFactory loggerFactory = applicationContext.getBean(loggerHandler.springMVCLoggerInfo().getLoggerFactory());
+            LoggerFactory loggerFactory = loggerHandler.springMVCLoggerInfo().getLoggerFactory();
             logger = loggerFactory.create(clazz);
             request.setAttribute(attrKey, logger);
         }

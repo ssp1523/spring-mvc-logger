@@ -27,4 +27,10 @@ public class NotInterceptorLoggerHandler extends HandlerMethod implements Logger
     public boolean isInterceptor() {
         return false;
     }
+
+    @Override
+    public HandlerMethod createWithResolvedBean() {
+        HandlerMethod handlerMethod = super.createWithResolvedBean();
+        return new NotInterceptorLoggerHandler(handlerMethod);
+    }
 }

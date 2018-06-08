@@ -33,8 +33,7 @@ public @interface SpringMVCLogger {
      * 指定请求方式 打印日志，只针对配置在类{@link ElementType#TYPE}上,默认全部
      * @see HttpMethod
      */
-    HttpMethod[] methods() default {HttpMethod.GET, HttpMethod.HEAD, HttpMethod.POST, HttpMethod.PUT,
-            HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.TRACE};
+    HttpMethod[] methods() default {};
 
     /**
      * body 体打印最大长度
