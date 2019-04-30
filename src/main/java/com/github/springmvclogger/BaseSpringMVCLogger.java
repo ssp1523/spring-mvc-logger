@@ -9,6 +9,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.ContentCachingResponseWrapper;
+import org.springframework.web.util.UrlPathHelper;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,8 @@ import java.util.List;
 public abstract class BaseSpringMVCLogger implements ApplicationContextAware {
 
     protected static final String SPRING_MVC_LOGGER = "spring_mvc_logger_key";
+
+    private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     protected ApplicationContext applicationContext;
 
@@ -88,9 +91,9 @@ public abstract class BaseSpringMVCLogger implements ApplicationContextAware {
         String host = request.getHeader(HttpHeaders.HOST);
         if (!StringUtils.isEmpty(host)) {
             msg.append("http://");
-            msg.append(host).append("/");
+            msg.append(host);
         }
-        msg.append(request.getRequestURI());
+        msg.append(urlPathHelper.getLookupPathForRequest(request));
         String queryString = request.getQueryString();
         if (queryString != null) {
             msg.append('?').append(queryString);
@@ -98,7 +101,6 @@ public abstract class BaseSpringMVCLogger implements ApplicationContextAware {
         return msg.toString();
     }
 
-    @SuppressWarnings("unchecked")
     protected HttpHeaders getResponseHeaders(HttpServletResponse response) {
         ServletServerHttpResponse nativeResponse = WebUtils.getNativeResponse(response, ServletServerHttpResponse.class);
         if (nativeResponse == null) {
