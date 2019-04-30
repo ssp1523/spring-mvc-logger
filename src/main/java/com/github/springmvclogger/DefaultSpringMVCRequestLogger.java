@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.Charset;
 
 /**
- * feign spring mvc 实现
+ * spring mvc 请求默认实现
  * @author: sunshaoping
  * @date: Create by in 下午6:39 2018/5/24
  */
@@ -20,7 +20,7 @@ public class DefaultSpringMVCRequestLogger extends BaseSpringMVCLogger implement
 
         byte[] body = getRequestBody(request, springMVCLoggerInfo.getBodyMaxLength());
 
-        Request requestFeign =
+        Request req =
                 Request.builder()
                         .method(HttpMethod.resolve(request.getMethod()))
                         .url(getUri(request))
@@ -30,7 +30,7 @@ public class DefaultSpringMVCRequestLogger extends BaseSpringMVCLogger implement
                         .build();
         //打印日志 请求日志
         Logger logger = createLogger(request, loggerHandler);
-        logger.logRequest(springMVCLoggerInfo.getConfigKey(), requestFeign);
+        logger.logRequest(springMVCLoggerInfo.getConfigKey(), req);
         applicationContext.publishEvent(new SpringMVCRequestLoggerEvent(this, request, loggerHandler));
     }
 
