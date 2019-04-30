@@ -1,5 +1,6 @@
 package com.github.springmvclogger;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.method.HandlerMethod;
 
 /**
@@ -27,5 +28,13 @@ public interface LoggerHandler {
      */
     boolean isInterceptor();
 
+
+    static HandlerMethod createHandlerMethod(HandlerMethod handlerMethod, ApplicationContext applicationContext) {
+        SpringMVCLoggerInfo springMVCLoggerInfo = SpringMVCLoggerInfo.createSpringMVCLoggerInfo(handlerMethod, applicationContext);
+        if (springMVCLoggerInfo == null) {
+            return new NotInterceptorLoggerHandler(handlerMethod);
+        }
+        return new HandlerMethodLoggerHandler(springMVCLoggerInfo, handlerMethod);
+    }
 
 }

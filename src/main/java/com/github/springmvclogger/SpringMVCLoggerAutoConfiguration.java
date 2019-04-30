@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
  */
 @Configuration
 @ConditionalOnWebApplication
-public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
+public class SpringMVCLoggerAutoConfiguration extends WebMvcConfigurerAdapter {
 
     /**
      * 请求日志
@@ -134,6 +134,7 @@ public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
 
 
     @Configuration
+    @ConditionalOnMissingBean(RequestMappingHandlerMapping.class)
     @Import(WebMvcAutoConfiguration.EnableWebMvcConfiguration.class)
     public static class WebMvcRegistrationConfig extends WebMvcRegistrationsAdapter implements ApplicationContextAware {
 
@@ -148,12 +149,7 @@ public class SpringMVCLoggerConfig extends WebMvcConfigurerAdapter {
 
                 @Override
                 protected HandlerMethod createHandlerMethod(Object handler, Method method) {
-                    HandlerMethod handlerMethod = super.createHandlerMethod(handler, method);
-                    SpringMVCLoggerInfo springMVCLoggerInfo = SpringMVCLoggerInfo.createSpringMVCLoggerInfo(handlerMethod, applicationContext);
-                    if (springMVCLoggerInfo == null) {
-                        return new NotInterceptorLoggerHandler(handlerMethod);
-                    }
-                    return new HandlerMethodLoggerHandler(springMVCLoggerInfo, handlerMethod);
+                    return LoggerHandler.createHandlerMethod(super.createHandlerMethod(handler, method), applicationContext);
                 }
             };
         }

@@ -315,7 +315,7 @@ public @interface NotLogger {
 
 `@SpringMVCLogger` 注解
 
-​	`configKey()`日志配置key,默认类名#方法(例子2)
+​	`configKey()` 日志配置key,默认类名#方法(例子2)
 
 ​	`methods()`指定请求方式 打印日志，只针对配置在类上,默认全部（例子3）
 
@@ -329,7 +329,7 @@ public @interface NotLogger {
 
 ​	`notRequestHeaders()` 不打印指定头信息，默认打印全部
 
-​     `loggerFactory()` 日志工厂类，工厂类必须由spring创建，否则会启动报错，默认`InfoLoggerFactory`
+​      `loggerFactory()` 日志工厂类，工厂类必须由spring创建，否则会启动报错，默认`InfoLoggerFactory`
 
 ​					info级别日志（例子4）
 
